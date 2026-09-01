@@ -1,0 +1,36 @@
+# Local lab folders
+/Evidence/
+/ISO/
+/VirtualMachines/
+
+# Virtual machine files
+*.vmdk
+*.vmem
+*.vmsd
+*.vmsn
+*.vmss
+*.nvram
+*.vmx
+*.vmxf
+*.lck
+
+# Images and installers
+*.iso
+*.exe
+*.msi
+
+# Credentials and unattended setup files
+.env
+*.key
+*.pem
+*.pfx
+unattend.xml
+Autounattend.xml
+
+# Local and temporary files
+*.log
+*.tmp
+Thumbs.db
+Desktop.ini
+.DS_Store
+
