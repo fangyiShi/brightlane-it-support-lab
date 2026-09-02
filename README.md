@@ -1,51 +1,93 @@
 # Bright Lane IT Support Lab
 
-Bright Lane is a practical home lab for building and explaining common Level 1 and Level 2 IT support skills. The current phase focuses on VMware, Windows Server and the foundation for an Active Directory environment.
+A Windows infrastructure lab for a fictional Australian retailer. It demonstrates virtual machine setup, network configuration, and the foundation for account, device, and access support using Active Directory.
 
-## Current status
+**Current milestone:** `BL-DC01` boots into Windows Server and has a verified hostname and DHCP lease. Active Directory and the client workstation are upcoming.
 
-The first Windows Server virtual machine is running.
+[Setup guide](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server) · [Verification and troubleshooting](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting) · [Wiki home](https://github.com/fangyiShi/brightlane-it-support-lab/wiki)
 
-- Server name: `BL-DC01`
-- Operating system: Windows Server 2025 Evaluation
-- Virtual platform: VMware Workstation Pro 26H1
-- Lab network: VMnet8 NAT, `192.168.24.0/24`
-- Current verified address: `192.168.24.128` from VMware DHCP
-- Static server address: planned as `192.168.24.10`, not yet verified
-- Active Directory and DNS roles: upcoming
+## Requirements and installation
 
-The existing DHCP result confirms that the server is connected to VMnet8. It does not yet prove that the planned static address, Active Directory or DNS services are working.
-
-## Environment overview
-
-| Component | Configuration |
+| Component | Version or configuration used |
 | --- | --- |
-| Host | Windows 11 laptop, AMD Ryzen 7 8845H, 24 GB RAM |
+| Host | Windows 11 Home, 64-bit; hardware virtualization enabled |
+| Hardware | Ryzen 7 8845H, 24 GB RAM, SSD storage |
 | Hypervisor | VMware Workstation Pro 26H1, version 26.0.0.25388281 |
-| Server VM | `BL-DC01`, 2 CPU cores, 4 GB RAM, 60 GB virtual disk |
-| Network | VMnet8 NAT, `192.168.24.0/24` |
-| Working folder | `D:\Projects\BrightLane-Lab` |
+| Guest installation media | Windows Server 2025 Evaluation ISO; Desktop Experience for a GUI |
+| Server resources | 2 CPU cores, 4 GB RAM, 60 GB virtual disk |
+| Commands | Built-in Windows PowerShell and Windows networking tools |
 
-## Progress
+These are the chosen lab settings. Leave host memory and storage available for installation media and snapshots.
 
-| Area | Status |
+Install [VMware Workstation Pro](https://knowledge.broadcom.com/external/article/368667/download-and-license-vmware-desktop-hype.html), obtain the [Windows Server evaluation ISO](https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2025), then follow the setup guide to create the VM. The verification commands use built-in Windows tools; no additional packages are required.
+
+## Start and configure the lab
+
+1. Open VMware Workstation and select `BL-DC01`. If it is not listed, use **File → Open** to select its existing `.vmx` file under `D:\Projects\BrightLane-Lab\VirtualMachines`.
+2. Check that its network adapter uses **Custom: VMnet8** and is connected.
+3. Power on the VM and sign in using its local Administrator account.
+4. Open **Windows PowerShell inside the guest** and run the verification commands below.
+
+Configuration lives in the local `.vmx` file and Windows settings. No `.env` is needed. Shut down Windows inside the guest after a session.
+
+| Network setting | Lab value |
 | --- | --- |
-| Host and storage preparation | Completed |
-| VMware and VMnet8 review | Completed |
-| Windows Server installation and hostname | Completed |
-| Static server networking | In progress |
-| Active Directory Domain Services and DNS | Upcoming |
-| Organisational units, users and groups | Upcoming |
-| Windows client and domain join | Upcoming |
-| File shares, Group Policy and support exercises | Upcoming |
+| VMnet8 subnet / gateway | `192.168.24.0/24` / `192.168.24.2` |
+| Last evidenced guest address | `192.168.24.128` via DHCP; leases can change |
+| Intended static address | `192.168.24.10/24`; final result not yet recorded |
+| DNS before AD/DNS setup | `192.168.24.2` |
 
-## Documentation
+## Verification and tests
 
-- [Wiki Home](https://github.com/fangyiShi/brightlane-it-support-lab/wiki)
-- [01 — Environment Setup and Windows Server](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server)
+This phase uses manual infrastructure checks. An automated test suite has not yet been implemented.
 
-The Wiki contains the setup details, important decisions and verified results. Documentation is updated as the lab develops, and planned work is kept separate from completed work.
+Run inside `BL-DC01`:
 
-## Safety and scope
+```powershell
+hostname
+ipconfig /all
+```
 
-ISO files, virtual machine disks, installers and local configuration files are not stored in this repository. Only selected screenshots and reusable scripts are included.
+**Recorded result:** hostname `BL-DC01`, DHCP enabled, IPv4 `192.168.24.128/24`, gateway and DNS `192.168.24.2`. External connectivity and domain services remain unverified.
+
+For a repeatable outbound connectivity check:
+
+```powershell
+Test-NetConnection -ComputerName www.microsoft.com -Port 443
+```
+
+**Pass condition:** `TcpTestSucceeded : True`. Its result has not been recorded. See the [verification guide](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting) for failure handling and static-IP acceptance criteria.
+
+## Completed and planned work
+
+| Work | State |
+| --- | --- |
+| Host assessment, VMware installation, VMnet8 and route review | Completed |
+| Windows Server installation, hostname, initial DHCP lease | Completed |
+| Static-IP result, final VM path, Tools, updates and activation checks | Verification outstanding |
+| AD DS and DNS; OUs, users and groups | Planned |
+| Windows client and domain join | Planned |
+| File permissions, Group Policy and support incidents | Planned |
+
+## Improvements
+
+- Automate repeatable configuration and network checks with PowerShell.
+- Add DNS, domain-join, sign-in, and permissions integration checks as features are implemented.
+- Establish a recoverable baseline and a separate backup strategy.
+- Monitor host memory and disk use before expanding beyond this small, representative environment.
+
+## Troubleshooting and operating notes
+
+Start with the [troubleshooting table](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting#troubleshooting): check the VM adapter, addressing, gateway, and DNS before investigating higher-level services. Record the symptom, check result, change, and retest.
+
+Keep all files together when relocating a powered-off VM. The final folder and installed edition still need confirmation. Keep passwords, product keys, installation media, and VM disks out of Git.
+
+## Documentation files
+
+`wiki/` contains Wiki Markdown sources; `images/` contains selected screenshots. The Wiki uses a separate Git repository. To publish the reviewed sources with your local Git login, run:
+
+```powershell
+.\scripts\Publish-Wiki.ps1
+```
+
+The publisher requires Git and a configured commit identity. It preserves other Wiki pages and uses a normal push.

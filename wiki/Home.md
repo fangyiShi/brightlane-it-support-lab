@@ -1,35 +1,17 @@
-# Bright Lane IT Support Lab
+Practical setup and operating notes for the **Bright Lane IT Support Lab**, a simulated Windows environment for a retail business.
 
-This Wiki records the setup and verification of a small Windows support lab. The goal is to practise the work commonly handled by Level 1 and Level 2 IT support teams, then explain each decision clearly.
+## Start here
 
-## Current position
-
-Phase 1 is in progress. VMware and the lab network have been reviewed, and the first Windows Server virtual machine is running as `BL-DC01`.
-
-The server currently has a verified DHCP address of `192.168.24.128`. The planned static address, Active Directory and DNS roles have not yet been verified.
-
-## Setup guide
-
-- [01 — Environment Setup and Windows Server](01-Environment-Setup-and-Windows-Server)
-
-## Environment at a glance
-
-| Item | Value |
+| Guide | What it covers |
 | --- | --- |
-| Host | Windows 11 laptop |
-| Hypervisor | VMware Workstation Pro 26H1 |
-| Server | Windows Server 2025 Evaluation |
-| Server name | `BL-DC01` |
-| Lab network | VMnet8 NAT, `192.168.24.0/24` |
-| Current verified IP | `192.168.24.128` from DHCP |
-| Planned static IP | `192.168.24.10` |
+| [Environment setup](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server) | Host preparation, VMware, VMnet8, Windows Server, and addressing |
+| [Verification and troubleshooting](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting) | Commands, expected results, known gaps, and first checks for errors |
+| [Project README](https://github.com/fangyiShi/brightlane-it-support-lab) | Requirements, startup instructions, progress, and improvements |
 
-## Upcoming work
+## Current milestone
 
-1. Configure and verify the static server address.
-2. Complete VMware Tools, updates and activation checks.
-3. Install Active Directory Domain Services and DNS.
-4. Create the domain structure, users and security groups.
-5. Build and join a Windows client.
-6. Add file shares, Group Policy and troubleshooting exercises.
+`BL-DC01` reaches Windows Server and has a verified hostname and DHCP lease on VMnet8. The retained address is `192.168.24.128/24`; the intended static address is `192.168.24.10/24`, with the final result still outstanding in this record.
 
+**Next:** complete server baseline verification, then configure AD DS and DNS, build a domain client, and practise accounts, permissions, and Group Policy support.
+
+Screenshots are displayed as compact previews. Click an image to read its original resolution.
