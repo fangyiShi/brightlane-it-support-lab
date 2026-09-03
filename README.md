@@ -4,7 +4,7 @@ A hands-on Windows infrastructure lab for a fictional Australian retailer. It de
 
 **Phase 1:** the domain and client are working, Finance permissions are configured, and policy/reporting evidence is recorded. Final verification and a structured troubleshooting exercise remain open.
 
-[Wiki home](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/) · [Setup guide](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server) · [Results and remaining checks](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting)
+[Wiki home](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/) · [Setup guide](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup) · [Results and remaining checks](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting)
 
 ## Environment
 

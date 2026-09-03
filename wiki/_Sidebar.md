@@ -4,7 +4,7 @@
 
 ## Phase 1
 
-- [01 — Environment and server](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server)
+- [01 — Environment setup](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup)
 - [02 — Active Directory and DNS](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/02-Active-Directory-and-DNS)
 - [03 — OUs, users and groups](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/03-OUs-Users-and-Groups)
 - [04 — Client and domain join](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/04-Windows-Client-and-Domain-Join)

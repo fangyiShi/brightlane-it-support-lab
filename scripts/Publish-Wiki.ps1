@@ -10,6 +10,7 @@ $RepoRoot = Split-Path $PSScriptRoot -Parent
 $WikiSource = Join-Path $RepoRoot 'wiki'
 $WikiFiles = @(
     'Home.md',
+    '01-Environment-Setup.md',
     '01-Environment-Setup-and-Windows-Server.md',
     '02-Active-Directory-and-DNS.md',
     '03-OUs-Users-and-Groups.md',

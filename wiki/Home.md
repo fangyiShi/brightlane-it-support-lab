@@ -6,7 +6,7 @@ This lab supports a fictional Australian retailer using a small Windows domain. 
 
 ## Phase 1 guides
 
-1. [Environment setup and Windows Server](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server)
+1. [Environment setup](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup)
 2. [Active Directory and DNS](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/02-Active-Directory-and-DNS)
 3. [OUs, users and groups](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/03-OUs-Users-and-Groups)
 4. [Windows client and domain join](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/04-Windows-Client-and-Domain-Join)

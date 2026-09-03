@@ -2,6 +2,8 @@
 
 The repository is the portfolio entry point. The Wiki holds the detailed guides. Its source Markdown is kept in this repository so changes can be reviewed in a pull request.
 
+The setup page uses the live Wiki name **01 — Environment Setup**. The older, longer URL is retained as a short navigation page so existing links still work. The publisher includes both pages and the custom sidebar.
+
 ## Review the pull request
 
 Review the README, Wiki sources and selected screenshots together. For this Phase 1 update:
@@ -12,7 +14,7 @@ Review the README, Wiki sources and selected screenshots together. For this Phas
 
 | Source page | Content |
 | --- | --- |
-| [01](../wiki/01-Environment-Setup-and-Windows-Server.md) | Host, VMware, networking and server |
+| [01](../wiki/01-Environment-Setup.md) | Host, VMware, networking and server |
 | [02](../wiki/02-Active-Directory-and-DNS.md) | Domain controller and DNS |
 | [03](../wiki/03-OUs-Users-and-Groups.md) | Directory structure and memberships |
 | [04](../wiki/04-Windows-Client-and-Domain-Join.md) | Client setup and domain join |
