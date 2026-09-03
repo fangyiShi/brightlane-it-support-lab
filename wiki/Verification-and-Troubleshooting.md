@@ -1,62 +1,89 @@
-Use these checks after setup or a network change. Run commands in **Windows PowerShell inside `BL-DC01`**, unless a step specifically names the host.
+# Verification and Troubleshooting
 
-## Recorded baseline
+Reviewed on **3 September 2026** against the Phase 1 Notion chapters and supplied screenshots. The newer evidence resolves several items still marked unverified in Notion; Notion itself was not edited.
 
-```powershell
-hostname
-ipconfig /all
-```
+## Current results
 
-The retained output confirms `BL-DC01`, DHCP enabled, `192.168.24.128/24`, and gateway/DNS `192.168.24.2`. DHCP leases may change; `.128` is the observed address at that checkpoint.
+| Area | What is established | Limit |
+| --- | --- | --- |
+| Environment | Server boots as BL-DC01; VMnet8 NAT and initial DHCP output recorded | Final server adapter and storage checks remain open |
+| AD and DNS | brightlane.test, BL-DC01 Global Catalog; simple and recursive DNS tests pass | DC DNS client and forwarder settings not shown |
+| Directory objects | Four BrightLane OUs; Alice and Ben enabled; Alice in Finance and recursively in the resource group | Exact group scopes, intermediate nesting and Ben's HR membership not shown |
+| Client | BL-CL01 domain membership, Workstations OU, Alice sign-in, DNS .10 | Installed edition and firmware settings not shown |
+| Permissions | Finance share and NTFS entries; saved test file; access-denied dialog | Test images do not identify the signed-in users; deletion reported only |
+| Group Policy | Alice's gpresult lists BL-User-Finance-Drive; F: and no-F: images supplied | Drive images do not show identity; full drive-item settings not shown |
+| PowerShell | AD query results and CSV contents visible | Saved script source, execution and full report path not shown |
+| Troubleshooting exercise | Guidance recorded | Alice's Account-tab checks and a documented fault/fix/retest are still pending |
 
-## Static-address acceptance
+Each [chapter](https://github.com/fangyiShi/brightlane-it-support-lab/wiki) links the supporting evidence. A filename helps identify the intended test, but does not prove a result that is absent from the image.
 
-After applying the planned static settings, inspect `ipconfig /all` again:
+## Remaining checks
 
-| Field | Expected result |
+These are follow-up checks, not claims that the lab is broken. No VMs were changed or tests rerun during this documentation review.
+
+### Server networking
+
+Inside BL-DC01, compare `ipconfig /all` with the intended final configuration:
+
+| Field | Expected |
 | --- | --- |
-| Host Name | `BL-DC01` |
-| DHCP Enabled | No |
-| IPv4 Address | `192.168.24.10` |
-| Subnet Mask | `255.255.255.0` |
-| Default Gateway | `192.168.24.2` |
-| DNS Servers | `192.168.24.2` during standalone setup |
+| IPv4 / mask | `192.168.24.10` / `255.255.255.0` |
+| DHCP enabled | No |
+| Gateway | `192.168.24.2` |
+| Preferred DNS | `192.168.24.10`; alternate blank |
 
-**Status:** the later command was reported as run, but its output has not been added to this record. These are acceptance criteria, not a reported pass.
+The notes record .10 and external name resolution. DNS monitoring now has passing evidence, but it does not show the DNS forwarder address. Read the Forwarders tab to confirm the intended `192.168.24.2`.
 
-## Outbound connectivity check
+For an outbound TCP check, use the correctly spelled hostname:
 
 ```powershell
 Test-NetConnection -ComputerName www.microsoft.com -Port 443
 ```
 
-**Pass:** `TcpTestSucceeded : True`. The command tests a TCP connection to that destination; it does not prove every internet service or Windows Update works. [Microsoft command reference](https://learn.microsoft.com/en-us/powershell/module/nettcpip/test-netconnection)
+Expected: `TcpTestSucceeded : True`. An earlier test used `www.microdoft.com`; that result does not verify Microsoft connectivity. No successful correctly spelled TCP result is supplied.
 
-**Status:** additional check proposed; result not recorded. If it fails, use the table below and retain the output before changing settings.
+### Identity, access and automation
 
-## Troubleshooting
+- Confirm group scope/category and the direct member of DL-Finance-Modify. Check Ben's GG-HR membership.
+- Pair Alice's successful file operations and Ben's denied access with `whoami` in their respective sessions.
+- Confirm F: points to `\\BL-DC01\Finance` for Alice, and record Ben's identity alongside the no-drive result.
+- Inspect the saved Export-ADUsers.ps1 and run it inside the guest before marking the script tested.
+- Complete the planned Alice Account-tab checks: disabled, locked-out and expiry state. Record a real or deliberately prepared lab incident, its fix and a retest.
 
-| Symptom | First checks and next action |
-| --- | --- |
-| PowerShell command is not recognised | Open Windows PowerShell, not CMD; check the spelling. |
-| Guest has no usable address | In VMware, confirm the adapter is connected to VMnet8. Check `ipconfig /all` for DHCP state and address. |
-| Guest address exists, but outbound traffic fails | Check the subnet, gateway, host connectivity, and VMware NAT service; verify DNS if name resolution fails. |
-| Name lookup fails in the TCP check | Run `nslookup www.microsoft.com`; inspect the configured DNS server and its response. Successful DNS alone does not prove TCP connectivity. |
-| Address changes between sessions | If DHCP is enabled, a changing lease is possible. For the planned static configuration, check that DHCP is disabled. |
-| VM fails to open after a move | Find the actual `.vmx` and all split disk files. Reopen the VM from that folder; record the exact missing-file error if one remains. |
-| Clipboard transfer fails | Check VMware Tools in the guest and **VM Settings → Options → Guest Isolation → Enable copy and paste**. |
-| VM becomes slow | On the host, inspect Task Manager memory, CPU, and disk use before increasing allocations. |
+### Environment housekeeping
 
-Record each actual incident as **symptom → checks/results → change → retest**. A failed ping alone is not proof of a disconnected network; ICMP may be filtered.
+The final server/client editions, client firmware settings, final VM folder, saved VMware folder preference, VMware Tools/clipboard, Windows updates/activation and recovery baseline are not all verified. Keep these separate from the successful domain and access checks.
 
-## Remaining validation
+## Troubleshooting cases
 
-- Confirm the final VM folder and exact Windows edition.
-- Retain the post-static-IP result.
-- Check VMware Tools, clipboard sharing, updates, and activation.
-- Establish a recoverable baseline before AD DS changes.
-- Add DNS, domain-join, sign-in, and permissions tests when those components exist.
+### Finance access initially denied
 
-Testing currently consists of manual infrastructure checks. Automated tests and code coverage are not present in this project.
+**Symptom:** Alice could not open the Finance share.
 
-[Back to setup](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server)
+**Checks/action in the notes:** inspect group membership and the resource-group nesting, then sign out and sign back in to refresh the session.
+
+**Result:** the learner reported create/read/edit/delete working afterwards; the supplied image shows the test file and contents.
+
+**Limit:** the original membership state and complete retest sequence were not captured. Incomplete nesting is a possible explanation, not a confirmed root cause.
+
+### Finance drive not visible in the Network view
+
+The notes describe looking at the Network page and seeing a discovery message. The relevant checks are **This PC**, the user's applied GPOs and item-level targeting. A later image shows Finance F:.
+
+Do not treat the Network discovery banner as proof that the drive policy failed, or change discovery/firewall settings solely because of that banner.
+
+### Server clock concern
+
+The learner reported the clock moving backwards and later said the issue was resolved after a settings check. The exact cause and before/after time-source state are not established. A file's LastWriteTime is not the same as the current system clock.
+
+## Support record format
+
+For the next incident, record **symptom → checks → action → retest → remaining limits**. Keep administrator passwords, recovery passwords and real-user data out of screenshots.
+
+## Sources
+
+- [08 — Troubleshooting, Notion working notes](https://www.notion.so/3d02ac67e65681e2b5ebf65172aee2b9)
+- [09 — Verification and Documentation, Notion working notes](https://www.notion.so/3d02ac67e656814980cbd40bc3dc5c02)
+- [Phase 1 source index](https://www.notion.so/3cc2ac67e65681168046eea4e65a86fe) and evidence linked in guides 01–07. Notion access may be required.
+
+[Back to Wiki home](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/)
