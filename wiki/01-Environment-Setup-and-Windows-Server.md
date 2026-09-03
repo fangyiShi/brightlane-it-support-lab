@@ -1,116 +1,87 @@
-The steps below reproduce the first server's foundation. **Verified checkpoint:** Windows boots as `BL-DC01` and obtains a DHCP lease. The final static-IP result is still outstanding in this record.
+# 01 — Environment Setup and Windows Server
 
-## Host and storage
+Build the virtual network and the first Windows server. The original DHCP checkpoint is retained below; later notes record the server at `192.168.24.10`.
 
-The host runs Windows 11 Home with a Ryzen 7 8845H (8 cores / 16 logical processors), 24 GB RAM, and an SSD. Hardware virtualization was already enabled.
+## Host and VMware
 
-Use `D:\Projects\BrightLane-Lab` as the working directory:
+The host runs Windows 11 Home with a Ryzen 7 8845H (8 cores / 16 logical processors), 24 GB RAM and a 953.9 GB SSD. Hardware virtualization was enabled.
 
-| Folder | Contents |
+VMware Workstation Pro **26H1 / 26.0.0.25388281** was installed. Its application location is separate from the VM storage; the exact installed application path was not separately confirmed.
+
+Use `D:\Projects\BrightLane-Lab` for the lab:
+
+| Folder | Purpose |
 | --- | --- |
-| `Installers` | VMware installer |
 | `ISO` | Windows installation media |
-| `VirtualMachines` | VM configurations and virtual disks |
-| `Evidence` | Original screenshots and command results |
+| `VirtualMachines` | VM configurations and disks |
+| `Evidence` | Original screenshots and results |
 
-D: has more available space than C:. They are volumes on the same SSD, so this arrangement manages capacity; it does not create a separate backup.
+D: was chosen for available space. C: and D: are on the same SSD, so this is storage organization, not a backup.
 
-## VMware setup
+In **Edit → Preferences → Workspace**, the intended default VM folder is `D:\Projects\BrightLane-Lab\VirtualMachines`. The entered preference was recorded; persistence after reopening still needs checking.
 
-1. Install VMware Workstation Pro for Windows using the default application path, `C:\Program Files\VMware\VMware Workstation\`.
-2. Open **Help → About**. The verified version is **26H1 / 26.0.0.25388281**.
-3. Under **Edit → Preferences → Workspace**, set the default VM folder to `D:\Projects\BrightLane-Lab\VirtualMachines` and save.
+## VMnet8 networking
 
-The application and VM files have independent storage locations. The saved record shows the entered preference; it does not separately verify persistence after reopening.
+Open **Edit → Virtual Network Editor** and review VMnet8:
 
-## Virtual network
-
-Open **Edit → Virtual Network Editor**, select **VMnet8**, and inspect its NAT and DHCP settings. Retain the reviewed configuration:
-
-| Setting | Value |
+| Setting | Lab value |
 | --- | --- |
-| Mode | NAT |
+| Connection | NAT |
 | Subnet / mask | `192.168.24.0/24` / `255.255.255.0` |
-| Host virtual adapter | `192.168.24.1` |
+| Host adapter | `192.168.24.1` |
 | NAT gateway | `192.168.24.2` |
-| DHCP pool | `192.168.24.128`–`192.168.24.254` |
+| DHCP pool | `192.168.24.128–192.168.24.254` |
+| DHCP service address | `192.168.24.254` |
 
-NAT lets the guests share a private network and initiate outbound connections through the host. It does not completely isolate them from the physical network.
+NAT gives the VMs a shared private network and outbound access through the host. It is not complete isolation from the host's physical network.
 
-<a href="https://raw.githubusercontent.com/fangyiShi/brightlane-it-support-lab/main/images/P1-003-host-vmnet8-baseline.png"><img src="https://raw.githubusercontent.com/fangyiShi/brightlane-it-support-lab/main/images/P1-003-host-vmnet8-baseline.png" alt="VMnet8 selected with NAT, DHCP enabled and the 192.168.24.0 subnet" width="420"></a>
+<a href="https://raw.githubusercontent.com/fangyiShi/brightlane-it-support-lab/main/images/P1-003-host-vmnet8-baseline.png"><img src="https://raw.githubusercontent.com/fangyiShi/brightlane-it-support-lab/main/images/P1-003-host-vmnet8-baseline.png" alt="VMnet8 NAT network on subnet 192.168.24.0" width="480"></a>
 
-*VMnet8 configuration — click to view full size.*
-
-On the **host**, inspect existing addresses and routes before retaining this subnet:
+The supplied host address/route review showed no overlapping private subnet. Recheck on the **host** if Wi-Fi or VPN routing changes:
 
 ```powershell
 Get-NetIPAddress -AddressFamily IPv4 |
     Select-Object InterfaceAlias, IPAddress, PrefixLength
-
 Get-NetRoute -AddressFamily IPv4 |
     Select-Object InterfaceAlias, DestinationPrefix, NextHop
 ```
 
-No conflicting private subnet appeared in the supplied host output. Recheck if Wi-Fi or VPN routing changes.
+## Create the server
 
-## Server installation
+1. Create a VM named `BL-DC01` and attach the Windows Server 2025 evaluation ISO.
+2. Allocate **4096 MB RAM, 2 CPU cores and a 60 GB split virtual disk**. Use **Custom: VMnet8**.
+3. Install a Desktop Experience image for the GUI used in this lab.
+4. Set a private Administrator password, sign in, rename Windows to `BL-DC01` and restart.
 
-1. Create a new VM and choose to install the operating system later.
-2. Apply the following build settings, then attach the Windows Server ISO to its virtual CD/DVD drive.
-3. Boot the VM from the ISO, select a Desktop Experience image, and install onto the empty virtual disk.
-4. Set the local Administrator password and sign in.
-5. In **Server Manager → Local Server**, open the computer-name setting, rename Windows to `BL-DC01`, and restart.
+The exact installed edition still needs a final readback. The intended dedicated VM folder is `VirtualMachines\BL-DC01`; a move from the parent folder was reported, but its final location is not verified. Keep all VM files together and move only while powered off.
 
-| Build setting | Value |
-| --- | --- |
-| VM name / guest profile | `BL-DC01` / Windows Server 2025 |
-| CPU / memory | 2 CPU cores / 4096 MB |
-| Disk | 60 GB, split into multiple files |
-| Adapter | Custom: VMnet8 |
-| Intended dedicated folder | `D:\Projects\BrightLane-Lab\VirtualMachines\BL-DC01` |
+## Initial DHCP checkpoint
 
-Desktop Experience supplies the GUI used in this lab. The planned edition was Standard Evaluation; the exact installed edition still needs confirmation.
+The original `ipconfig /all` output shows hostname `BL-DC01`, DHCP enabled, address `192.168.24.128/24`, and gateway/DNS `192.168.24.2`.
 
-**Folder correction:** The original VM was created in the parent `VirtualMachines` folder and a manual move was reported. Move only while powered off, keep all VM files together, and reopen the `.vmx`. Select **I moved it** for the same relocated VM if prompted. The final location has not been verified.
+[View the historical DHCP output](https://raw.githubusercontent.com/fangyiShi/brightlane-it-support-lab/main/images/P1-009-BL-DC01-hostname-and-dhcp-baseline.png). This is **not** the current domain-controller configuration.
 
-The Windows desktop, Server Manager, and Windows hostname are verified. Installing Windows Server does not install or configure an Active Directory domain.
+## Move to a fixed server address
 
-## Network baseline
+In the server's IPv4 adapter properties, the lab procedure used:
 
-Run `ipconfig /all` inside the **guest**. The retained result shows:
-
-| Field | Recorded result |
-| --- | --- |
-| Hostname / adapter | `BL-DC01` / `Ethernet0` |
-| DHCP / address | Enabled / `192.168.24.128/24` |
-| Gateway / DNS | `192.168.24.2` / `192.168.24.2` |
-| DHCP server | `192.168.24.254` |
-
-<a href="https://raw.githubusercontent.com/fangyiShi/brightlane-it-support-lab/main/images/P1-009-BL-DC01-hostname-and-dhcp-baseline.png"><img src="https://raw.githubusercontent.com/fangyiShi/brightlane-it-support-lab/main/images/P1-009-BL-DC01-hostname-and-dhcp-baseline.png" alt="BL-DC01 ipconfig output showing DHCP enabled and IPv4 address 192.168.24.128" width="560"></a>
-
-*Verified hostname and DHCP baseline — click to read the original output.*
-
-This is the earlier DHCP checkpoint, not evidence of the proposed static address or external connectivity.
-
-## Static address
-
-**Procedure provided; final result not yet recorded.** In the guest, open `ncpa.cpl` → **Ethernet0 → Properties → Internet Protocol Version 4 → Properties**, then enter:
-
-| Setting | Intended value |
+| Setting | Value |
 | --- | --- |
 | Address / mask | `192.168.24.10` / `255.255.255.0` |
 | Gateway | `192.168.24.2` |
-| Preferred DNS before AD/DNS | `192.168.24.2` |
-| Alternate DNS | Blank |
+| DNS before AD/DNS | `192.168.24.2` |
+| DNS after AD/DNS | Intended: `192.168.24.10`; alternate blank |
 
-Use an available address outside the DHCP pool to reduce duplicate-allocation risk. DHCP does not overwrite a manually assigned address. Save, then verify the result against the [acceptance checks](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting#static-address-acceptance).
+The manual address is outside the DHCP pool to reduce duplicate-allocation risk.
 
-When this becomes the first domain controller hosting DNS, its DNS client should point to itself at `192.168.24.10`; do not retain NAT DNS as an alternate domain DNS server. This belongs to the later AD/DNS phase.
+**Result:** later Notion notes record `192.168.24.10` and successful external name resolution. The supplied folder does not contain a final server adapter readback proving DHCP is disabled or that its DNS client now points to itself.
 
-## References
+The [AD/DNS guide](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/02-Active-Directory-and-DNS) covers the domain configuration. Final adapter settings, VMware Tools, updates/activation and VM-folder checks remain listed in [verification](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting).
+
+## Sources
+
+- [01 — Environment Setup — working notes (Notion; access may be required)](https://www.notion.so/3d02ac67e65681df8e05f82f750a7a43)
+- Selected screenshots shown or linked above, reviewed on 3 September 2026.
 
 - [Broadcom: virtual networking](https://knowledge.broadcom.com/external/article/309842/understanding-networking-types-in-hosted.html)
-- [Microsoft: Windows Server installation](https://learn.microsoft.com/en-us/windows-server/get-started/install-windows-server)
-- [Microsoft: domain controller DNS client settings](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/best-practices-for-dns-client-settings)
-
-[Next: verification and troubleshooting](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting)
+- [Microsoft: domain-controller DNS client settings](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/best-practices-for-dns-client-settings)

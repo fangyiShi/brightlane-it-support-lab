@@ -1,17 +1,14 @@
-**Bright Lane Lab**
+## Bright Lane Lab
 
-- [Wiki home](https://github.com/fangyiShi/brightlane-it-support-lab/wiki)
-- [Project README](https://github.com/fangyiShi/brightlane-it-support-lab)
+[Repository](https://github.com/fangyiShi/brightlane-it-support-lab) · [Wiki home](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/)
 
-**Build the lab**
+## Phase 1
 
-- [Host and storage](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server#host-and-storage)
-- [VMware setup](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server#vmware-setup)
-- [Virtual network](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server#virtual-network)
-- [Server installation](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server#server-installation)
-- [Addressing](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server#network-baseline)
-
-**Operate and verify**
-
-- [Verification checks](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting)
-- [Troubleshooting](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting#troubleshooting)
+- [01 — Environment and server](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server)
+- [02 — Active Directory and DNS](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/02-Active-Directory-and-DNS)
+- [03 — OUs, users and groups](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/03-OUs-Users-and-Groups)
+- [04 — Client and domain join](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/04-Windows-Client-and-Domain-Join)
+- [05 — Shares and permissions](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/05-File-Shares-and-Permissions)
+- [06 — Group Policy](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/06-Group-Policy)
+- [07 — PowerShell](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/07-PowerShell-Administration)
+- [Verification and troubleshooting](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting)

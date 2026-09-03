@@ -1,17 +1,28 @@
-Practical setup and operating notes for the **Bright Lane IT Support Lab**, a simulated Windows environment for a retail business.
+# Bright Lane Lab Wiki
 
-## Start here
+This lab supports a fictional Australian retailer using a small Windows domain. The guides explain what was configured, why it matters, and what the evidence actually proves.
 
-| Guide | What it covers |
-| --- | --- |
-| [Environment setup](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server) | Host preparation, VMware, VMnet8, Windows Server, and addressing |
-| [Verification and troubleshooting](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting) | Commands, expected results, known gaps, and first checks for errors |
-| [Project README](https://github.com/fangyiShi/brightlane-it-support-lab) | Requirements, startup instructions, progress, and improvements |
+**Reviewed: 3 September 2026.** AD/DNS, the domain client, Finance access controls, Group Policy and user reporting are documented. Phase 1 is not fully signed off; see the final verification page.
 
-## Current milestone
+## Phase 1 guides
 
-`BL-DC01` reaches Windows Server and has a verified hostname and DHCP lease on VMnet8. The retained address is `192.168.24.128/24`; the intended static address is `192.168.24.10/24`, with the final result still outstanding in this record.
+1. [Environment setup and Windows Server](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/01-Environment-Setup-and-Windows-Server)
+2. [Active Directory and DNS](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/02-Active-Directory-and-DNS)
+3. [OUs, users and groups](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/03-OUs-Users-and-Groups)
+4. [Windows client and domain join](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/04-Windows-Client-and-Domain-Join)
+5. [File shares and permissions](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/05-File-Shares-and-Permissions)
+6. [Group Policy](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/06-Group-Policy)
+7. [PowerShell administration](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/07-PowerShell-Administration)
+8. [Verification and troubleshooting](https://github.com/fangyiShi/brightlane-it-support-lab/wiki/Verification-and-Troubleshooting) — results, open checks and support cases.
 
-**Next:** complete server baseline verification, then configure AD DS and DNS, build a domain client, and practise accounts, permissions, and Group Policy support.
+## How to read the results
 
-Screenshots are displayed as compact previews. Click an image to read its original resolution.
+**Screenshot-confirmed** means the supplied image shows that result. **Recorded in notes** means the Notion record reports it, without a matching final screenshot. **Pending** means the supplied record does not establish completion.
+
+The screenshots represent lab checkpoints, not continuous monitoring. Lab-only accounts, private addresses and the test domain are shown; passwords and installation media are not included.
+
+[Repository overview](https://github.com/fangyiShi/brightlane-it-support-lab) · [Source-page index](https://github.com/fangyiShi/brightlane-it-support-lab/tree/main/wiki)
+
+## Sources
+
+[Phase 1 working notes](https://www.notion.so/3cc2ac67e65681168046eea4e65a86fe), including chapters 01–09, and the selected local Phase 1 evidence. Individual guides link to their source notes.
